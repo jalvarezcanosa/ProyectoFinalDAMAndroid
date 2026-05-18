@@ -10,7 +10,7 @@
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Iniciar Sesión"
+        android:text="@string/hola_de_nuevo"
         android:textSize="28sp"
         android:textStyle="bold"
         android:layout_marginBottom="32dp"/>
@@ -33,6 +33,15 @@
         android:layout_marginBottom="16dp"/>
 
     <EditText
+        android:id="@+id/etTelephone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Teléfono"
+        android:inputType="phone"
+        android:visibility="gone"
+        android:layout_marginBottom="16dp"/>
+
+    <EditText
         android:id="@+id/etPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -40,11 +49,14 @@
         android:inputType="textPassword"
         android:layout_marginBottom="24dp"/>
 
+
+
     <Button
         android:id="@+id/btnAction"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Entrar"
+        android:textSize="16sp"
         android:layout_marginBottom="16dp"/>
 
     <TextView
