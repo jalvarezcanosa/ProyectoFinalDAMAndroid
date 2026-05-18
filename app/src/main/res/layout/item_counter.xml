@@ -67,7 +67,7 @@
                     android:id="@+id/tvIndividualCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Propio: 0"
+                    android:text="Mío: 0"
                     android:textSize="14sp"
                     android:textColor="#8A36D2"
                     android:textStyle="bold" />
