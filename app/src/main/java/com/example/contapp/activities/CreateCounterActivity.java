@@ -138,6 +138,7 @@ public class CreateCounterActivity extends AppCompatActivity {
                     Toast.makeText(CreateCounterActivity.this, "¡Contador creado!", Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
+                    btnSaveCounter.setEnabled(true);
                     Toast.makeText(CreateCounterActivity.this, "Error al crear: " + response.code(), Toast.LENGTH_SHORT).show();
                 }
             }

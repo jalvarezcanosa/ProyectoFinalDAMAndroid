@@ -22,7 +22,7 @@ import com.example.contapp.models.CounterDetailResponse;
 import com.example.contapp.network.ApiClient;
 import com.example.contapp.network.ApiService;
 import com.example.contapp.adapters.ParticipantAdapter;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -42,7 +42,7 @@ public class CounterDetailActivity extends AppCompatActivity {
     private TextView tvCounterIndividualCount;
     private Button btnEdit;
     private Button btnDelete;
-    private FloatingActionButton fabIncrement;
+    private ExtendedFloatingActionButton fabIncrement;
     private LinearLayout llAdminActions;
     private RecyclerView rvRanking;
 
@@ -188,7 +188,11 @@ public class CounterDetailActivity extends AppCompatActivity {
                     Toast.makeText(CounterDetailActivity.this, "Contador borrado", Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
-                    Toast.makeText(CounterDetailActivity.this, "Solo el creador puede borrarlo (Error " + response.code() + ")", Toast.LENGTH_SHORT).show();
+                    if (response.code() == 403) {
+                        Toast.makeText(CounterDetailActivity.this, "Solo el creador puede borrarlo (Error " + response.code() + ")", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(CounterDetailActivity.this, "Error al borrar el contador: " + response.code(), Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
 
