@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.contapp.R;
+import com.example.contapp.activities.CounterDetailActivity;
 import com.example.contapp.models.Counter;
 
 import java.util.ArrayList;
