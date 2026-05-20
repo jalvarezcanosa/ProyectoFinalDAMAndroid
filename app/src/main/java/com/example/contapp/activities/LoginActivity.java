@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         apiService = ApiClient.getClient(this).create(ApiService.class);
 
         if (sessionManager.isLoggedIn()) {
-            //goToHome();
+            goToHome();
             return;
         }
 
@@ -119,12 +119,12 @@ public class LoginActivity extends AppCompatActivity {
                     String token = response.body().getToken();
                     sessionManager.saveAuthToken(token);
                     Toast.makeText(LoginActivity.this, "¡Bienvenido!", Toast.LENGTH_SHORT).show();
-                    //goToHome();
+                    goToHome();
                 } else {
                     if (isLoginMode) {
-                        Toast.makeText(LoginActivity.this, "Usuario existente", Toast.LENGTH_SHORT).show();
-                    } else {
                         Toast.makeText(LoginActivity.this, "Error en las credenciales", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Usuario existente o error en el registro", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -137,9 +137,9 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    //private void goToHome() {
-        //Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-        //startActivity(intent);
-        //finish();
-    //}
+    private void goToHome() {
+        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }

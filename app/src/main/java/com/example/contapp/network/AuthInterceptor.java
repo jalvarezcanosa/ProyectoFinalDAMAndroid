@@ -23,7 +23,7 @@ public class AuthInterceptor implements Interceptor {
         String token = sessionManager.fetchAuthToken();
 
         if (token != null) {
-            requestBuilder.addHeader("Authorization", "Token " + token);
+            requestBuilder.addHeader("Authorization", "Bearer " + token);
         }
 
         return chain.proceed(requestBuilder.build());
