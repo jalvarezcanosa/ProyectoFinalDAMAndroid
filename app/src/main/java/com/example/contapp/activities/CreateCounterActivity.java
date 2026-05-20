@@ -38,7 +38,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class CreateCounterActivity extends AppCompatActivity {
-    private EditText etTitle, etDescription;
+    private EditText etTitle;
+    private EditText etDescription;
     private TextView tvSelectedDate;
     private Button btnPickDate, btnPickImage, btnSaveCounter;
     private ImageView ivPreview;

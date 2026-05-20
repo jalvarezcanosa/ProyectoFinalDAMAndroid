@@ -21,6 +21,7 @@ import com.example.contapp.models.Counter;
 import com.example.contapp.models.CounterDetailResponse;
 import com.example.contapp.network.ApiClient;
 import com.example.contapp.network.ApiService;
+import com.example.contapp.adapters.ParticipantAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import retrofit2.Call;
@@ -33,8 +34,14 @@ public class CounterDetailActivity extends AppCompatActivity {
     private ApiService apiService;
 
     private ImageView ivCover;
-    private TextView tvCounterTitle, tvCounterStatus, tvCounterDescription, tvCounterDates, tvCounterGlobalCount, tvCounterIndividualCount;
-    private Button btnEdit, btnDelete;
+    private TextView tvCounterTitle;
+    private TextView tvCounterStatus;
+    private TextView tvCounterDescription;
+    private TextView tvCounterDates;
+    private TextView tvCounterGlobalCount;
+    private TextView tvCounterIndividualCount;
+    private Button btnEdit;
+    private Button btnDelete;
     private FloatingActionButton fabIncrement;
     private LinearLayout llAdminActions;
     private RecyclerView rvRanking;
@@ -103,7 +110,7 @@ public class CounterDetailActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<CounterDetailResponse> call, Throwable t) {
-                Toast.makeText(CounterDetailActivity.this, "Error de red", Toast.Toast.LENGTH_SHORT).show();
+                Toast.makeText(CounterDetailActivity.this, "Error de red", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -140,8 +147,7 @@ public class CounterDetailActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void incrementCounter() {
+    private void incrementCounter() {
         fabIncrement.setEnabled(false);
 
         apiService.incrementCounter(counterId).enqueue(new Callback<Counter>() {
@@ -188,7 +194,7 @@ public class CounterDetailActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(CounterDetailActivity.this, "Error de red", Toast.Toast.LENGTH_SHORT).show();
+                Toast.makeText(CounterDetailActivity.this, "Error de red", Toast.LENGTH_SHORT).show();
             }
         });
     }

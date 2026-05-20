@@ -76,7 +76,10 @@ public class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.CounterV
 
     public static class CounterViewHolder extends RecyclerView.ViewHolder {
         ImageView ivCounterImage;
-        TextView tvCounterTitle, tvCounterStatus, tvGlobalCount, tvIndividualCount;
+        TextView tvCounterTitle;
+        TextView tvCounterStatus;
+        TextView tvGlobalCount;
+        TextView tvIndividualCount;
 
         public CounterViewHolder(@NonNull View itemView) {
             super(itemView);
