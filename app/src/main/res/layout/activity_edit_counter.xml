@@ -13,13 +13,13 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nuevo Contador"
+            android:text="Editar Contador"
             android:textSize="24sp"
             android:textStyle="bold"
             android:layout_marginBottom="24dp" />
 
         <EditText
-            android:id="@+id/etTitle"
+            android:id="@+id/etEditTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Título del contador"
@@ -27,7 +27,7 @@
             android:layout_marginBottom="16dp" />
 
         <EditText
-            android:id="@+id/etDescription"
+            android:id="@+id/etEditDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Descripción (opcional)"
@@ -51,13 +51,13 @@
             android:layout_marginBottom="16dp">
 
             <Button
-                android:id="@+id/btnPickDate"
+                android:id="@+id/btnEditPickDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Seleccionar" />
 
             <TextView
-                android:id="@+id/tvSelectedDate"
+                android:id="@+id/tvEditSelectedDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="No seleccionada"
@@ -73,14 +73,14 @@
             android:layout_marginBottom="8dp" />
 
         <Button
-            android:id="@+id/btnPickImage"
+            android:id="@+id/btnEditPickImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Elegir foto de la galería"
             android:layout_marginBottom="16dp" />
 
         <ImageView
-            android:id="@+id/ivPreview"
+            android:id="@+id/ivEditPreview"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:scaleType="centerCrop"
@@ -88,11 +88,12 @@
             android:layout_marginBottom="32dp" />
 
         <Button
-            android:id="@+id/btnSaveCounter"
+            android:id="@+id/btnSaveChanges"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Crear Contador"
+            android:text="Guardar Cambios"
             android:layout_marginTop="24dp" />
 
     </LinearLayout>
+
 </ScrollView>
