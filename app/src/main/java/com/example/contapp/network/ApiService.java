@@ -46,7 +46,7 @@ public interface ApiService {
 
     @Multipart
     @PUT("counters/{id}/update/")
-    Call<Counter> updateCounters(
+    Call<Counter> updateCounter(
             @Path("id") int id,
             @Part("title") RequestBody title,
             @Part("description") RequestBody description,

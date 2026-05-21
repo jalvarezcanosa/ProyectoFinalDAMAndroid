@@ -41,7 +41,9 @@ public class CreateCounterActivity extends AppCompatActivity {
     private EditText etTitle;
     private EditText etDescription;
     private TextView tvSelectedDate;
-    private Button btnPickDate, btnPickImage, btnSaveCounter;
+    private Button btnPickDate;
+    private Button btnPickImage;
+    private Button btnSaveCounter;
     private ImageView ivPreview;
 
     private Calendar calendar;
@@ -139,7 +141,22 @@ public class CreateCounterActivity extends AppCompatActivity {
                     finish();
                 } else {
                     btnSaveCounter.setEnabled(true);
-                    Toast.makeText(CreateCounterActivity.this, "Error al crear: " + response.code(), Toast.LENGTH_SHORT).show();
+
+                    try {
+                        String errorJsonString = response.errorBody().string();
+
+                        org.json.JSONObject jsonObject = new org.json.JSONObject(errorJsonString);
+                        String errorMessage = "Error desconocido";
+
+                        if (jsonObject.has("error")) {
+                            errorMessage = jsonObject.getString("error");
+                        } else if (jsonObject.has("message")) {
+                            errorMessage = jsonObject.getString("message");
+                        }
+                        Toast.makeText(CreateCounterActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+                        Toast.makeText(CreateCounterActivity.this, "Error al crear: " + response.code(), Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
 

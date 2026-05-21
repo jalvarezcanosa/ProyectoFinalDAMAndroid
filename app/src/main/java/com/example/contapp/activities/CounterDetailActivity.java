@@ -122,7 +122,20 @@ public class CounterDetailActivity extends AppCompatActivity {
         tvCounterIndividualCount.setText(String.valueOf(counter.getIndividualCount()));
 
         String closedAt = counter.getClosedAt();
-        tvCounterDates.setText(closedAt != null ? "Cierre el: " + closedAt : "Sin límite de fecha");
+        if (closedAt != null && !closedAt.isEmpty()) {
+            try {
+                java.text.SimpleDateFormat isoFormat = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX", java.util.Locale.getDefault());
+                java.util.Date date = isoFormat.parse(closedAt);
+
+                java.text.SimpleDateFormat friendlyFormat = new java.text.SimpleDateFormat("dd/MM/yyyy 'a las' HH:mm", java.util.Locale.getDefault());
+
+                tvCounterDates.setText(String.format("Cierre el: " + friendlyFormat.format(date)));
+            } catch (Exception e){
+                tvCounterDates.setText("Cierre el: "+ closedAt);
+            }
+        } else {
+            tvCounterDates.setText("Sin límite de fecha");
+        }
 
         if ("closed".equalsIgnoreCase(counter.getStatus())) {
             tvCounterStatus.setText("Estado: CERRADO");
