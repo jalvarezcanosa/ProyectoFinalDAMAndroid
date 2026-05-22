@@ -3,6 +3,7 @@ package com.example.contapp.network;
 import com.example.contapp.models.AuthResponse;
 import com.example.contapp.models.Counter;
 import com.example.contapp.models.CounterDetailResponse;
+import com.example.contapp.models.UserProfileResponse;
 
 import java.util.HashMap;
 import java.util.List;
@@ -59,4 +60,7 @@ public interface ApiService {
 
     @POST("counters/{id}/increment/")
     Call<Counter> incrementCounter(@Path("id") int id);
+
+    @GET("auth/profile/")
+    Call<UserProfileResponse> getUserProfile();
 }

@@ -32,7 +32,6 @@ public class CounterDetailActivity extends AppCompatActivity {
 
     private int counterId;
     private ApiService apiService;
-
     private ImageView ivCover;
     private TextView tvCounterTitle;
     private TextView tvCounterStatus;
@@ -45,7 +44,6 @@ public class CounterDetailActivity extends AppCompatActivity {
     private ExtendedFloatingActionButton fabIncrement;
     private LinearLayout llAdminActions;
     private RecyclerView rvRanking;
-
     private ParticipantAdapter participantAdapter;
 
     @Override
@@ -215,5 +213,4 @@ public class CounterDetailActivity extends AppCompatActivity {
             }
         });
     }
-
 }

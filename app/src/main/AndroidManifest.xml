@@ -36,6 +36,9 @@
         <activity
             android:name=".activities.EditCounterActivity"
             android:exported="false" />
+        <activity
+            android:name=".activities.ProfileActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
