@@ -182,6 +182,20 @@ public class CounterDetailActivity extends AppCompatActivity {
         if (counter.getRanking() != null) {
             participantAdapter.setParticipantList(counter.getRanking());
         }
+
+        if(counter.isCreator()) {
+            btnEdit.setVisibility(View.VISIBLE);
+            btnDelete.setVisibility(View.VISIBLE);
+            if (llAdminActions != null) {
+                llAdminActions.setVisibility(View.VISIBLE);
+            }
+        } else {
+            btnEdit.setVisibility(View.GONE);
+            btnDelete.setVisibility(View.GONE);
+            if (llAdminActions != null) {
+                llAdminActions.setVisibility(View.GONE);
+            }
+        }
     }
 
     private void incrementCounter() {

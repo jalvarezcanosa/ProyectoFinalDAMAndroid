@@ -28,6 +28,9 @@ public class CounterDetailResponse {
     @SerializedName("invite_code")
     private String inviteCode;
 
+    @SerializedName("is_creator")
+    private boolean isCreator;
+
     public int getId() {
         return id;
     }
@@ -66,5 +69,9 @@ public class CounterDetailResponse {
 
     public String getInviteCode() {
         return inviteCode;
+    }
+
+    public boolean isCreator() {
+        return isCreator;
     }
 }
