@@ -13,7 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -37,7 +36,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CreateCounterActivity extends AppCompatActivity {
+public class CreateCounterFragment extends Fragment {
     private EditText etTitle;
     private EditText etDescription;
     private TextView tvSelectedDate;
@@ -137,7 +136,7 @@ public class CreateCounterActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Counter> call, Response<Counter> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(CreateCounterActivity.this, "¡Contador creado!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateCounterFragment.this, "¡Contador creado!", Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
                     btnSaveCounter.setEnabled(true);
@@ -153,9 +152,9 @@ public class CreateCounterActivity extends AppCompatActivity {
                         } else if (jsonObject.has("message")) {
                             errorMessage = jsonObject.getString("message");
                         }
-                        Toast.makeText(CreateCounterActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CreateCounterFragment.this, errorMessage, Toast.LENGTH_SHORT).show();
                     } catch (Exception e) {
-                        Toast.makeText(CreateCounterActivity.this, "Error al crear: " + response.code(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CreateCounterFragment.this, "Error al crear: " + response.code(), Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -163,7 +162,7 @@ public class CreateCounterActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<Counter> call, Throwable t) {
                 btnSaveCounter.setEnabled(true);
-                Toast.makeText(CreateCounterActivity.this, "Error de red", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CreateCounterFragment.this, "Error de red", Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -7,7 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -15,7 +17,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,7 +37,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CounterDetailActivity extends AppCompatActivity {
+public class CounterDetailFragment extends Fragment {
 
     private int counterId;
     private ApiService apiService;
@@ -54,35 +59,44 @@ public class CounterDetailActivity extends AppCompatActivity {
     private ParticipantAdapter participantAdapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_counter_detail);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.activity_counter_detail, container, false);
+    }
 
-        counterId = getIntent().getIntExtra("COUNTER_ID", -1);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        if (getArguments() != null) {
+            counterId = getArguments().getInt("COUNTER_ID", -1);
+        } else {
+            counterId = -1;
+        }
+
         if (counterId == -1) {
-            Toast.makeText(this, "Error: Contador no encontrado", Toast.LENGTH_SHORT).show();
-            finish();
+            Toast.makeText(requireContext(), "Error: Contador no encontrado", Toast.LENGTH_SHORT).show();
+            Navigation.findNavController(view).popBackStack();
             return;
         }
 
-        apiService = ApiClient.getClient(this).create(ApiService.class);
+        apiService = ApiClient.getClient(requireContext()).create(ApiService.class);
 
-        ivCover = findViewById(R.id.ivCover);
-        tvCounterTitle = findViewById(R.id.tvCounterTitle);
-        tvCounterStatus = findViewById(R.id.tvCounterStatus);
-        tvCounterDescription = findViewById(R.id.tvCounterDescription);
-        tvInviteCode = findViewById(R.id.tvInviteCode);
-        btnCopyCode = findViewById(R.id.btnCopyCode);
-        tvCounterDates = findViewById(R.id.tvCounterDates);
-        tvCounterGlobalCount = findViewById(R.id.tvCounterGlobalCount);
-        tvCounterIndividualCount = findViewById(R.id.tvCounterIndividualCount);
-        btnEdit = findViewById(R.id.btnEdit);
-        btnDelete = findViewById(R.id.btnDelete);
-        fabIncrement = findViewById(R.id.fabIncrement);
-        llAdminActions = findViewById(R.id.llAdminActions);
-        rvRanking = findViewById(R.id.rvRanking);
+        ivCover = view.findViewById(R.id.ivCover);
+        tvCounterTitle = view.findViewById(R.id.tvCounterTitle);
+        tvCounterStatus = view.findViewById(R.id.tvCounterStatus);
+        tvCounterDescription = view.findViewById(R.id.tvCounterDescription);
+        tvInviteCode = view.findViewById(R.id.tvInviteCode);
+        btnCopyCode = view.findViewById(R.id.btnCopyCode);
+        tvCounterDates = view.findViewById(R.id.tvCounterDates);
+        tvCounterGlobalCount = view.findViewById(R.id.tvCounterGlobalCount);
+        tvCounterIndividualCount = view.findViewById(R.id.tvCounterIndividualCount);
+        btnEdit = view.findViewById(R.id.btnEdit);
+        btnDelete = view.findViewById(R.id.btnDelete);
+        fabIncrement = view.findViewById(R.id.fabIncrement);
+        llAdminActions = view.findViewById(R.id.llAdminActions);
+        rvRanking = view.findViewById(R.id.rvRanking);
 
-        rvRanking.setLayoutManager(new LinearLayoutManager(this));
+        rvRanking.setLayoutManager(new LinearLayoutManager(requireContext()));
         participantAdapter = new ParticipantAdapter();
         rvRanking.setAdapter(participantAdapter);
 
@@ -91,25 +105,27 @@ public class CounterDetailActivity extends AppCompatActivity {
         btnDelete.setOnClickListener(v -> showDeleteConfirmation());
 
         btnEdit.setOnClickListener(v -> {
-            Intent intent = new Intent(CounterDetailActivity.this, EditCounterActivity.class);
-            intent.putExtra("COUNTER_ID", counterId);
-            startActivity(intent);
+            Bundle bundle = new Bundle();
+            bundle.putInt("COUNTER_ID", counterId);
+            Navigation.findNavController(view).navigate(R.id.action_detail_to_edit, bundle);
         });
 
         btnCopyCode.setOnClickListener(v -> {
             if (!currentInviteCode.isEmpty()) {
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipboardManager clipboard = (ClipboardManager) requireActivity().getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText("Código de Invitación", currentInviteCode);
                 clipboard.setPrimaryClip(clip);
-                Toast.makeText(this, "Código copiado al portapapeles", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "Código copiado al portapapeles", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
-        loadCounterDetails();
+        if (counterId != -1) {
+            loadCounterDetails();
+        }
     }
 
     private void loadCounterDetails() {
@@ -118,15 +134,21 @@ public class CounterDetailActivity extends AppCompatActivity {
             public void onResponse(Call<CounterDetailResponse> call, Response<CounterDetailResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     CounterDetailResponse counter = response.body();
-                    updateUI(counter);
+                    if (isAdded()) {
+                        updateUI(counter);
+                    }
                 } else {
-                    Toast.makeText(CounterDetailActivity.this, "Error al cargar detalles", Toast.LENGTH_SHORT).show();
+                    if (isAdded()) {
+                        Toast.makeText(requireContext(), "Error al cargar detalles", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<CounterDetailResponse> call, Throwable t) {
-                Toast.makeText(CounterDetailActivity.this, "Error de red", Toast.LENGTH_SHORT).show();
+                if (isAdded()) {
+                    Toast.makeText(requireContext(), "Error de red", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -176,7 +198,7 @@ public class CounterDetailActivity extends AppCompatActivity {
         }
 
         if (counter.getImageUrl() != null && !counter.getImageUrl().isEmpty()) {
-            Glide.with(this).load(counter.getImageUrl()).into(ivCover);
+            Glide.with(requireContext()).load(counter.getImageUrl()).into(ivCover);
         }
 
         if (counter.getRanking() != null) {
@@ -206,25 +228,31 @@ public class CounterDetailActivity extends AppCompatActivity {
             public void onResponse(Call<Counter> call, Response<Counter> response) {
                 fabIncrement.setEnabled(true);
                 if (response.isSuccessful() && response.body() != null) {
-                    tvCounterIndividualCount.setText(String.valueOf(response.body().getIndividualCount()));
-                    tvCounterGlobalCount.setText(String.valueOf(response.body().getGlobalCount()));
+                    if (isAdded()) {
+                        tvCounterIndividualCount.setText(String.valueOf(response.body().getIndividualCount()));
+                        tvCounterGlobalCount.setText(String.valueOf(response.body().getGlobalCount()));
 
-                    loadCounterDetails();
+                        loadCounterDetails();
+                    }
                 } else {
-                    Toast.makeText(CounterDetailActivity.this, "Error al sumar", Toast.LENGTH_SHORT).show();
+                    if (isAdded()) {
+                        Toast.makeText(requireContext(), "Error al sumar", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<Counter> call, Throwable t) {
                 fabIncrement.setEnabled(true);
-                Toast.makeText(CounterDetailActivity.this, "Error de red al incrementar", Toast.LENGTH_SHORT).show();
+                if (isAdded()) {
+                    Toast.makeText(requireContext(), "Error de red al incrementar", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
 
     private void showDeleteConfirmation() {
-        new AlertDialog.Builder(this)
+        new AlertDialog.Builder(requireContext())
                 .setTitle("Borrar Contador")
                 .setMessage("¿Estás seguro de que quieres borrar este contador de forma permanente? Se perderán todas las puntuaciones.")
                 .setPositiveButton("Borrar", (dialog, which) -> deleteCounter())
@@ -235,21 +263,27 @@ public class CounterDetailActivity extends AppCompatActivity {
         apiService.deleteCounter(counterId).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
+                if (!isAdded()) return;
+
                 if (response.isSuccessful()) {
-                    Toast.makeText(CounterDetailActivity.this, "Contador borrado", Toast.LENGTH_SHORT).show();
-                    finish();
+                    Toast.makeText(requireContext(), "Contador borrado", Toast.LENGTH_SHORT).show();
+                    if (getView() != null) {
+                        Navigation.findNavController(getView()).popBackStack();
+                    }
                 } else {
                     if (response.code() == 403) {
-                        Toast.makeText(CounterDetailActivity.this, "Solo el creador puede borrarlo (Error " + response.code() + ")", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), "Solo el creador puede borrarlo (Error " + response.code() + ")", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(CounterDetailActivity.this, "Error al borrar el contador: " + response.code(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), "Error al borrar el contador: " + response.code(), Toast.LENGTH_SHORT).show();
                     }
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(CounterDetailActivity.this, "Error de red", Toast.LENGTH_SHORT).show();
+                if (isAdded()) {
+                    Toast.makeText(requireContext(), "Error de red", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

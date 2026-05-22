@@ -64,7 +64,7 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         fabCreate.setOnClickListener(v-> {
-        Intent intent = new Intent(HomeActivity.this, CreateCounterActivity.class);
+        Intent intent = new Intent(HomeActivity.this, CreateCounterFragment.class);
         startActivity(intent);
         });
 

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.example.contapp.activities.HomeFragment"
+        android:label="Inicio"
+        tools:layout="@layout/activity_home" />
+    <fragment
+        android:id="@+id/nav_profile"
+        android:name="com.example.contapp.activities.ProfileFragment"
+        android:label="Perfil"
+        tools:layout="@layout/activity_profile" />
+    <fragment
+        android:id="@+id/nav_counter_detail"
+        android:name="com.example.contapp.activities.CounterDetailFragment"
+        android:label="Detalle del Contador"
+        tools:layout="@layout/fragment_counter_detail" />
+
+</navigation>

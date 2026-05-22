@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.contapp.R;
-import com.example.contapp.activities.CounterDetailActivity;
+import com.example.contapp.activities.CounterDetailFragment;
 import com.example.contapp.models.Counter;
 
 import java.util.ArrayList;
@@ -63,7 +63,7 @@ public class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.CounterV
         }
 
         holder.itemView.setOnClickListener(v-> {
-            Intent intent = new Intent(context, CounterDetailActivity.class);
+            Intent intent = new Intent(context, CounterDetailFragment.class);
             intent.putExtra("COUNTER_ID", counter.getId());
             context.startActivity(intent);
         });
