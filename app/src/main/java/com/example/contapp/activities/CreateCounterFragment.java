@@ -1,11 +1,15 @@
 package com.example.contapp.activities;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -14,7 +18,10 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.example.contapp.R;
 import com.example.contapp.models.Counter;
@@ -52,7 +59,7 @@ public class CreateCounterFragment extends Fragment {
     private final ActivityResultLauncher<Intent> galleryLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
-                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                     selectedImageUri = result.getData().getData();
                     ivPreview.setImageURI(selectedImageUri);
                 }
@@ -60,20 +67,24 @@ public class CreateCounterFragment extends Fragment {
     );
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_counter);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.activity_create_counter, container, false);
+    }
 
-        apiService = ApiClient.getClient(this).create(ApiService.class);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        apiService = ApiClient.getClient(requireContext()).create(ApiService.class);
         calendar = Calendar.getInstance();
 
-        etTitle = findViewById(R.id.etTitle);
-        etDescription = findViewById(R.id.etDescription);
-        tvSelectedDate = findViewById(R.id.tvSelectedDate);
-        btnPickDate = findViewById(R.id.btnPickDate);
-        btnPickImage = findViewById(R.id.btnPickImage);
-        btnSaveCounter = findViewById(R.id.btnSaveCounter);
-        ivPreview = findViewById(R.id.ivPreview);
+        etTitle = view.findViewById(R.id.etTitle);
+        etDescription = view.findViewById(R.id.etDescription);
+        tvSelectedDate = view.findViewById(R.id.tvSelectedDate);
+        btnPickDate = view.findViewById(R.id.btnPickDate);
+        btnPickImage = view.findViewById(R.id.btnPickImage);
+        btnSaveCounter = view.findViewById(R.id.btnSaveCounter);
+        ivPreview = view.findViewById(R.id.ivPreview);
 
         btnPickDate.setOnClickListener(v -> showDateTimePicker());
 
@@ -86,12 +97,12 @@ public class CreateCounterFragment extends Fragment {
     }
 
     private void showDateTimePicker() {
-        new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
+        new DatePickerDialog(requireContext(), (view, year, month, dayOfMonth) -> {
             calendar.set(Calendar.YEAR, year);
             calendar.set(Calendar.MONTH, month);
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-            new TimePickerDialog(this, (timeView, hourOfDay, minute) -> {
+            new TimePickerDialog(requireContext(), (timeView, hourOfDay, minute) -> {
                 calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 calendar.set(Calendar.MINUTE, minute);
 
@@ -107,7 +118,7 @@ public class CreateCounterFragment extends Fragment {
         String description = etDescription.getText().toString().trim();
 
         if (title.isEmpty()) {
-            Toast.makeText(this, "El título es obligatorio", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "El título es obligatorio", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -128,16 +139,19 @@ public class CreateCounterFragment extends Fragment {
                 imagePart = MultipartBody.Part.createFormData("image", file.getName(), fileReqBody);
             } catch (IOException e) {
                 e.printStackTrace();
-                Toast.makeText(this, "Error al procesar la imagen", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "Error al procesar la imagen", Toast.LENGTH_SHORT).show();
             }
         }
 
         apiService.createCounter(titlePart, descPart, datePart, imagePart).enqueue(new Callback<Counter>() {
             @Override
             public void onResponse(Call<Counter> call, Response<Counter> response) {
+                if (!isAdded()) return;
                 if (response.isSuccessful()) {
-                    Toast.makeText(CreateCounterFragment.this, "¡Contador creado!", Toast.LENGTH_SHORT).show();
-                    finish();
+                    Toast.makeText(requireContext(), "¡Contador creado!", Toast.LENGTH_SHORT).show();
+                    if (getView() != null) {
+                        Navigation.findNavController(getView()).popBackStack();
+                    }
                 } else {
                     btnSaveCounter.setEnabled(true);
 
@@ -152,24 +166,25 @@ public class CreateCounterFragment extends Fragment {
                         } else if (jsonObject.has("message")) {
                             errorMessage = jsonObject.getString("message");
                         }
-                        Toast.makeText(CreateCounterFragment.this, errorMessage, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show();
                     } catch (Exception e) {
-                        Toast.makeText(CreateCounterFragment.this, "Error al crear: " + response.code(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), "Error al crear: " + response.code(), Toast.LENGTH_SHORT).show();
                     }
                 }
             }
 
             @Override
             public void onFailure(Call<Counter> call, Throwable t) {
+                if (!isAdded()) return;
                 btnSaveCounter.setEnabled(true);
-                Toast.makeText(CreateCounterFragment.this, "Error de red", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "Error de red", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private File getFileFromUri(Uri uri) throws IOException{
-        InputStream inputStream = getContentResolver().openInputStream(uri);
-        File file = File.createTempFile("counter_img_", ".jpg", getCacheDir());
+        InputStream inputStream = requireContext().getContentResolver().openInputStream(uri);
+        File file = File.createTempFile("counter_img_", ".jpg", requireContext().getCacheDir());
         FileOutputStream out = new FileOutputStream(file);
         byte[] buffer = new byte[1024];
         int length;
