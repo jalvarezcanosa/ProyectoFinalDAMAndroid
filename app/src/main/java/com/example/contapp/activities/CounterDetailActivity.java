@@ -1,11 +1,15 @@
 package com.example.contapp.activities;
 
 import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -36,6 +40,9 @@ public class CounterDetailActivity extends AppCompatActivity {
     private TextView tvCounterTitle;
     private TextView tvCounterStatus;
     private TextView tvCounterDescription;
+    private TextView tvInviteCode;
+    private ImageButton btnCopyCode;
+    private String currentInviteCode = "";
     private TextView tvCounterDates;
     private TextView tvCounterGlobalCount;
     private TextView tvCounterIndividualCount;
@@ -64,6 +71,8 @@ public class CounterDetailActivity extends AppCompatActivity {
         tvCounterTitle = findViewById(R.id.tvCounterTitle);
         tvCounterStatus = findViewById(R.id.tvCounterStatus);
         tvCounterDescription = findViewById(R.id.tvCounterDescription);
+        tvInviteCode = findViewById(R.id.tvInviteCode);
+        btnCopyCode = findViewById(R.id.btnCopyCode);
         tvCounterDates = findViewById(R.id.tvCounterDates);
         tvCounterGlobalCount = findViewById(R.id.tvCounterGlobalCount);
         tvCounterIndividualCount = findViewById(R.id.tvCounterIndividualCount);
@@ -85,6 +94,15 @@ public class CounterDetailActivity extends AppCompatActivity {
             Intent intent = new Intent(CounterDetailActivity.this, EditCounterActivity.class);
             intent.putExtra("COUNTER_ID", counterId);
             startActivity(intent);
+        });
+
+        btnCopyCode.setOnClickListener(v -> {
+            if (!currentInviteCode.isEmpty()) {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("Código de Invitación", currentInviteCode);
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(this, "Código copiado al portapapeles", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
@@ -118,6 +136,14 @@ public class CounterDetailActivity extends AppCompatActivity {
         tvCounterDescription.setText(counter.getDescription() != null ? counter.getDescription() : "Sin descripción");
         tvCounterGlobalCount.setText(String.valueOf(counter.getGlobalCount()));
         tvCounterIndividualCount.setText(String.valueOf(counter.getIndividualCount()));
+        currentInviteCode = counter.getInviteCode();
+        if (currentInviteCode != null && !currentInviteCode.isEmpty()) {
+            tvInviteCode.setText(currentInviteCode);
+            btnCopyCode.setVisibility(View.VISIBLE);
+        } else {
+            tvInviteCode.setText("No disponible");
+            btnCopyCode.setVisibility(View.GONE);
+        }
 
         String closedAt = counter.getClosedAt();
         if (closedAt != null && !closedAt.isEmpty()) {

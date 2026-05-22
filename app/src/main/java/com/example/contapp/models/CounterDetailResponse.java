@@ -25,6 +25,9 @@ public class CounterDetailResponse {
     @SerializedName("ranking")
     private List<Participant> ranking;
 
+    @SerializedName("invite_code")
+    private String inviteCode;
+
     public int getId() {
         return id;
     }
@@ -59,5 +62,9 @@ public class CounterDetailResponse {
 
     public List<Participant> getRanking() {
         return ranking;
+    }
+
+    public String getInviteCode() {
+        return inviteCode;
     }
 }

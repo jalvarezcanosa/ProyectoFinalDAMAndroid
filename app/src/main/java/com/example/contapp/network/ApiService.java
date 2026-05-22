@@ -40,7 +40,7 @@ public interface ApiService {
     );
 
     @POST("counters/join/")
-    Call<Counter> joinCounter(@Part HashMap<String, String> body);
+    Call<Counter> joinCounter(@Body HashMap<String, String> body);
 
     @GET("counters/{id}/")
     Call<CounterDetailResponse> getCounterDetail(@Path("id") int id);

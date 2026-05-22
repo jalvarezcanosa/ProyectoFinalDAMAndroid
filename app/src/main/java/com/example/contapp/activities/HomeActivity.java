@@ -17,6 +17,7 @@ import com.example.contapp.adapters.CounterAdapter;
 import com.example.contapp.models.Counter;
 import com.example.contapp.network.ApiClient;
 import com.example.contapp.network.ApiService;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.HashMap;
@@ -32,6 +33,7 @@ public class HomeActivity extends AppCompatActivity {
     private FloatingActionButton fabCreate;
     private Button btnJoin;
     private ApiService apiService;
+    private BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,10 +44,24 @@ public class HomeActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerViewCounters);
         fabCreate = findViewById(R.id.fabCreate);
         btnJoin = findViewById(R.id.btnJoin);
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new CounterAdapter(this);
         recyclerView.setAdapter(adapter);
+
+        bottomNavigationView.setSelectedItemId(R.id.nav_home);
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.nav_home) {
+                return true;
+            } else if (itemId == R.id.nav_profile) {
+                startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
+            }
+            return false;
+        });
 
         fabCreate.setOnClickListener(v-> {
         Intent intent = new Intent(HomeActivity.this, CreateCounterActivity.class);
