@@ -32,6 +32,7 @@ import com.example.contapp.network.ApiClient;
 import com.example.contapp.network.ApiService;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -226,16 +227,22 @@ public class EditCounterFragment extends Fragment {
 
     private File getFileFromUri(Uri uri) throws IOException {
         if (getContext() == null) throw new IOException("Context is null");
-        InputStream inputStream = requireContext().getContentResolver().openInputStream(uri);
-        File file = File.createTempFile("counter_img_edit_", ".jpg", requireContext().getCacheDir());
-        FileOutputStream out = new FileOutputStream(file);
-        byte[] buffer = new byte[1024];
-        int length;
-        while ((length = inputStream.read(buffer)) > 0) {
-            out.write(buffer, 0, length);
+        InputStream inputStream = null;
+        try {
+            inputStream = requireContext().getContentResolver().openInputStream(uri);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
         }
-        out.close();
-        if (inputStream != null) inputStream.close();
+        File file = File.createTempFile("counter_img_edit_", ".jpg", requireContext().getCacheDir());
+        try (FileOutputStream out = new FileOutputStream(file)) {
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = inputStream.read(buffer)) > 0) {
+                out.write(buffer, 0, length);
+            }
+            out.close();
+        }
+        inputStream.close();
         return file;
     }
 
