@@ -210,6 +210,6 @@
         android:textColor="#FFFFFF"
         android:textStyle="bold"
         app:backgroundTint="#8A36D2"
-        app:shapeAppearanceOverlay="@style/FabRedondo" />
+        app:shapeAppearanceOverlay="@style/CircleShape" />
 
 </RelativeLayout>

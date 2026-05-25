@@ -7,7 +7,7 @@
 
     <style name="Theme.ContApp" parent="Base.Theme.ContApp" />
 
-    <style name="FabRedondo" parent="">
+    <style name="CircleShape">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>

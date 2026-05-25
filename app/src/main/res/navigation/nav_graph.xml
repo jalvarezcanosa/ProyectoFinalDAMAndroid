@@ -7,18 +7,46 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.example.contapp.activities.HomeFragment"
+        android:name="com.example.contapp.fragments.HomeFragment"
         android:label="Inicio"
-        tools:layout="@layout/activity_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_home_to_create"
+            app:destination="@id/nav_counter_create" />
+        <action
+            android:id="@+id/action_home_to_detail"
+            app:destination="@id/nav_counter_detail" />
+    </fragment>
+
     <fragment
         android:id="@+id/nav_profile"
-        android:name="com.example.contapp.activities.ProfileFragment"
+        android:name="com.example.contapp.fragments.ProfileFragment"
         android:label="Perfil"
-        tools:layout="@layout/activity_profile" />
+        tools:layout="@layout/fragment_profile" />
+
     <fragment
         android:id="@+id/nav_counter_detail"
-        android:name="com.example.contapp.activities.CounterDetailFragment"
+        android:name="com.example.contapp.fragments.CounterDetailFragment"
         android:label="Detalle del Contador"
-        tools:layout="@layout/fragment_counter_detail" />
+        tools:layout="@layout/fragment_counter_detail">
+        <argument
+            android:name="COUNTER_ID"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_detail_to_edit"
+            app:destination="@id/nav_counter_edit" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_counter_create"
+        android:name="com.example.contapp.fragments.CreateCounterFragment"
+        android:label="Crear Contador"
+        tools:layout="@layout/fragment_create_counter" />
+
+    <fragment
+        android:id="@+id/nav_counter_edit"
+        android:name="com.example.contapp.fragments.EditCounterFragment"
+        android:label="Editar Contador"
+        tools:layout="@layout/fragment_edit_counter" />
 
 </navigation>

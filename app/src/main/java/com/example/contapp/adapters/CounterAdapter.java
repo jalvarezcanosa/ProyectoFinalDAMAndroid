@@ -1,8 +1,8 @@
 package com.example.contapp.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +10,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.contapp.R;
-import com.example.contapp.activities.CounterDetailFragment;
 import com.example.contapp.models.Counter;
 
 import java.util.ArrayList;
@@ -63,9 +63,9 @@ public class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.CounterV
         }
 
         holder.itemView.setOnClickListener(v-> {
-            Intent intent = new Intent(context, CounterDetailFragment.class);
-            intent.putExtra("COUNTER_ID", counter.getId());
-            context.startActivity(intent);
+            Bundle bundle = new Bundle();
+            bundle.putInt("COUNTER_ID", counter.getId());
+            Navigation.findNavController(v).navigate(R.id.action_home_to_detail, bundle);
         });
     }
 

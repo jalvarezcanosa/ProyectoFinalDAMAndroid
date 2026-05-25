@@ -46,21 +46,13 @@
         android:id="@+id/fabCreate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/bottomNavigationView"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:layout_margin="24dp"
         android:contentDescription="Crear Contador"
         android:src="@android:drawable/ic_input_add"
         app:tint="#FFFFFF"
         app:backgroundTint="#8A36D2"
-        app:shapeAppearanceOverlay="@style/FabRedondo" />
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="#EDEDED"
-        app:menu="@menu/bottom_nav_menu" />
+        app:shapeAppearanceOverlay="@style/CircleShape" />
 
 </RelativeLayout>

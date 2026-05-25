@@ -1,4 +1,6 @@
-package com.example.contapp.activities;
+package com.example.contapp.fragments;
+
+import static android.app.Activity.RESULT_OK;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -6,16 +8,21 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
 import com.example.contapp.R;
@@ -39,7 +46,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EditCounterActivity extends AppCompatActivity {
+public class EditCounterFragment extends Fragment {
     private int counterId;
     private EditText etEditTitle;
     private EditText etEditDescription;
@@ -65,27 +72,33 @@ public class EditCounterActivity extends AppCompatActivity {
     );
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_counter);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_edit_counter, container, false);
+    }
 
-        counterId = getIntent().getIntExtra("COUNTER_ID", -1);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (getArguments() != null) {
+            counterId = getArguments().getInt("COUNTER_ID", -1);
+        }
+
         if (counterId == -1){
-            Toast.makeText(this, "Error al cargar el contador", Toast.LENGTH_SHORT).show();
-            finish();
+            Toast.makeText(requireContext(), "Error al cargar el contador", Toast.LENGTH_SHORT).show();
+            Navigation.findNavController(view).popBackStack();
             return;
         }
 
-        apiService = ApiClient.getClient(this).create(ApiService.class);
+        apiService = ApiClient.getClient(requireContext()).create(ApiService.class);
         calendar = Calendar.getInstance();
 
-        etEditTitle = findViewById(R.id.etEditTitle);
-        etEditDescription = findViewById(R.id.etEditDescription);
-        tvEditSelectedDate = findViewById(R.id.tvEditSelectedDate);
-        btnEditPickDate = findViewById(R.id.btnEditPickDate);
-        btnEditPickImage = findViewById(R.id.btnEditPickImage);
-        btnSaveChanges = findViewById(R.id.btnSaveChanges);
-        ivEditPreview = findViewById(R.id.ivEditPreview);
+        etEditTitle = view.findViewById(R.id.etEditTitle);
+        etEditDescription = view.findViewById(R.id.etEditDescription);
+        tvEditSelectedDate = view.findViewById(R.id.tvEditSelectedDate);
+        btnEditPickDate = view.findViewById(R.id.btnEditPickDate);
+        btnEditPickImage = view.findViewById(R.id.btnEditPickImage);
+        btnSaveChanges = view.findViewById(R.id.btnSaveChanges);
+        ivEditPreview = view.findViewById(R.id.ivEditPreview);
 
         btnEditPickDate.setOnClickListener(v -> showDateTimePicker());
 
@@ -102,39 +115,54 @@ public class EditCounterActivity extends AppCompatActivity {
     private void loadCurrentData() {
         apiService.getCounterDetail(counterId).enqueue(new Callback<CounterDetailResponse>() {
             @Override
-            public void onResponse(Call<CounterDetailResponse> call, Response<CounterDetailResponse> response) {
+            public void onResponse(@NonNull Call<CounterDetailResponse> call, @NonNull Response<CounterDetailResponse> response) {
+                if (!isAdded()) return;
+
                 if (response.isSuccessful() && response.body() != null) {
                     CounterDetailResponse counter = response.body();
                     etEditTitle.setText(counter.getTitle());
                     etEditDescription.setText(counter.getDescription());
+                    String closedAt = counter.getClosedAt();
 
-                    if (counter.getClosedAt() != null) {
-                        tvEditSelectedDate.setText(counter.getClosedAt());
+                    if (closedAt != null) {
+                        tvEditSelectedDate.setText(closedAt);
+                        try {
+                            java.text.SimpleDateFormat isoFormat = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX", java.util.Locale.getDefault());
+                            java.util.Date date = isoFormat.parse(closedAt);
+                            if (date != null) calendar.setTime(date);
+
+                            java.text.SimpleDateFormat friendlyFormat = new java.text.SimpleDateFormat("dd/MM/yyyy 'a las' HH:mm", java.util.Locale.getDefault());
+
+                            tvEditSelectedDate.setText(String.format("Cierre el: " + friendlyFormat.format(date)));
+                        } catch (Exception e){
+                            tvEditSelectedDate.setText("Cierre el: "+ closedAt);
+                        }
                     }
 
                     if (counter.getImageUrl() != null && !counter.getImageUrl().isEmpty()) {
                         currentImageUrl = counter.getImageUrl();
-                        Glide.with(EditCounterActivity.this).load(currentImageUrl).into(ivEditPreview);
+                        Glide.with(requireContext()).load(currentImageUrl).into(ivEditPreview);
                     }
                 } else {
-                    Toast.makeText(EditCounterActivity.this, "No se pudieron cargar los datos", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), "No se pudieron cargar los datos", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<CounterDetailResponse> call, Throwable t) {
-                Toast.makeText(EditCounterActivity.this, "Error de red", Toast.LENGTH_SHORT).show();
+            public void onFailure(@NonNull Call<CounterDetailResponse> call, @NonNull Throwable t) {
+                if (!isAdded()) return;
+                Toast.makeText(requireContext(), "Error de red", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void showDateTimePicker() {
-        new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
+        new DatePickerDialog(requireContext(), (view, year, month, dayOfMonth) -> {
             calendar.set(Calendar.YEAR, year);
             calendar.set(Calendar.MONTH, month);
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-            new TimePickerDialog(this, (timeView, hourOfDay, minute) -> {
+            new TimePickerDialog(requireContext(), (timeView, hourOfDay, minute) -> {
                 calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 calendar.set(Calendar.MINUTE, minute);
 
@@ -170,33 +198,36 @@ public class EditCounterActivity extends AppCompatActivity {
                 imagePart = MultipartBody.Part.createFormData("image", file.getName(), fileReqBody);
             } catch (IOException e) {
                 e.printStackTrace();
-                Toast.makeText(this, "Error al procesar la imagen", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "Error al procesar la imagen", Toast.LENGTH_SHORT).show();
             }
         }
 
         apiService.updateCounter(counterId, titlePart, descPart, datePart, imagePart).enqueue(new Callback<Counter>() {
             @Override
-            public void onResponse(Call<Counter> call, Response<Counter> response) {
+            public void onResponse(@NonNull Call<Counter> call, @NonNull Response<Counter> response) {
+                if (!isAdded()) return;
                 btnSaveChanges.setEnabled(true);
                 if (response.isSuccessful()) {
-                    Toast.makeText(EditCounterActivity.this, "¡Contador actualizado con éxito!", Toast.LENGTH_SHORT).show();
-                    finish();
+                    Toast.makeText(requireContext(), "¡Contador actualizado con éxito!", Toast.LENGTH_SHORT).show();
+                    Navigation.findNavController(requireView()).popBackStack();
                 } else {
-                    Toast.makeText(EditCounterActivity.this, "Error al actualizar el contador", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), "Error al actualizar el contador", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<Counter> call, Throwable t) {
+            public void onFailure(@NonNull Call<Counter> call, @NonNull Throwable t) {
+                if (!isAdded()) return;
                 btnSaveChanges.setEnabled(true);
-                Toast.makeText(EditCounterActivity.this, "Error de red: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "Error de red: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private File getFileFromUri(Uri uri) throws IOException {
-        InputStream inputStream = getContentResolver().openInputStream(uri);
-        File file = File.createTempFile("counter_img_edit_", ".jpg", getCacheDir());
+        if (getContext() == null) throw new IOException("Context is null");
+        InputStream inputStream = requireContext().getContentResolver().openInputStream(uri);
+        File file = File.createTempFile("counter_img_edit_", ".jpg", requireContext().getCacheDir());
         FileOutputStream out = new FileOutputStream(file);
         byte[] buffer = new byte[1024];
         int length;
