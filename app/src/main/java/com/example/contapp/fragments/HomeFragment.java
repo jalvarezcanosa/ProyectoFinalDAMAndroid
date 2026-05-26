@@ -4,8 +4,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -35,9 +38,10 @@ public class HomeFragment extends Fragment {
     private RecyclerView recyclerView;
     private CounterAdapter adapter;
     private FloatingActionButton fabCreate;
+    private Spinner spinnerFilter;
     private Button btnJoin;
     private ApiService apiService;
-    private BottomNavigationView bottomNavigationView;
+    private String currentFilter = null;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,11 +59,13 @@ public class HomeFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerViewCounters);
         fabCreate = view.findViewById(R.id.fabCreate);
         btnJoin = view.findViewById(R.id.btnJoin);
+        spinnerFilter = view.findViewById(R.id.spinnerFilter);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         adapter = new CounterAdapter(requireContext());
         recyclerView.setAdapter(adapter);
 
+        setupSpinner();
 
         fabCreate.setOnClickListener(v -> {
             Navigation.findNavController(view).navigate(R.id.action_home_to_create);
@@ -68,6 +74,34 @@ public class HomeFragment extends Fragment {
         btnJoin.setOnClickListener(v -> showJoinDialog());
     }
 
+    private void setupSpinner() {
+        // Las opciones que verá el usuario
+        String[] options = {"Todos", "Abiertos", "Cerrados"};
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, options);
+        spinnerFilter.setAdapter(spinnerAdapter);
+
+        spinnerFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) {
+                    currentFilter = null;
+                } else if (position == 1) {
+                    currentFilter = "open";
+                } else if (position == 2) {
+                    currentFilter = "closed";
+                }
+
+                loadCounters();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+
     @Override
     public void onResume() {
         super.onResume();
@@ -75,7 +109,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void loadCounters() {
-        apiService.getMyCounters().enqueue(new Callback<List<Counter>>() {
+        apiService.getMyCounters(currentFilter).enqueue(new Callback<List<Counter>>() {
             @Override
             public void onResponse(@NonNull Call<List<Counter>> call, @NonNull Response<List<Counter>> response) {
                 if (!isAdded()) return;

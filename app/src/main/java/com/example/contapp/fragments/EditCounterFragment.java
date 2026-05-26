@@ -240,7 +240,6 @@ public class EditCounterFragment extends Fragment {
             while ((length = inputStream.read(buffer)) > 0) {
                 out.write(buffer, 0, length);
             }
-            out.close();
         }
         inputStream.close();
         return file;

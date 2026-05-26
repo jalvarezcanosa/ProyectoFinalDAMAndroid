@@ -19,6 +19,7 @@ import retrofit2.http.DELETE;
 import retrofit2.http.Multipart;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface ApiService {
     @POST("auth/register/")
@@ -28,7 +29,7 @@ public interface ApiService {
     Call<AuthResponse> login(@Body HashMap<String, String> body);
 
     @GET("counters/")
-    Call<List<Counter>> getMyCounters();
+    Call<List<Counter>> getMyCounters(@Query("status") String status);
 
     @Multipart
     @POST("counters/create/")
