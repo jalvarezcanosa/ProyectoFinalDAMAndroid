@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="24dp"
-    android:background="#F5F5F5">
+    android:background="@color/bg_dark">
 
     <LinearLayout
         android:id="@+id/profileInfoContainer"
@@ -24,50 +24,56 @@
             android:layout_height="140dp"
             android:layout_marginBottom="24dp"
             android:src="@android:drawable/ic_menu_myplaces"
-            android:background="#E0E0E0"
-            android:padding="24dp"
+            android:background="@color/surface_dark"
+            android:padding="4dp"
             android:scaleType="centerCrop"
+            app:strokeWidth="2dp"
+            app:strokeColor="@color/mint_primary"
             app:shapeAppearanceOverlay="@style/CircleShape" />
 
         <TextView
             android:id="@+id/tvProfileUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cargando..."
+            android:text="Nombre de Usuario"
             android:textSize="28sp"
             android:textStyle="bold"
-            android:textColor="#333333"
+            android:textColor="@color/white"
             android:layout_marginBottom="8dp" />
 
         <TextView
             android:id="@+id/tvProfileEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cargando..."
+            android:text="usuario@ejemplo.com"
             android:textSize="16sp"
-            android:textColor="#666666"
+            android:textColor="@color/text_secondary"
             android:layout_marginBottom="8dp" />
 
         <TextView
             android:id="@+id/tvProfilePhone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cargando..."
+            android:text="+34 000 000 000"
             android:textSize="16sp"
-            android:textColor="#666666" />
+            android:textColor="@color/text_secondary" />
 
     </LinearLayout>
 
     <Button
         android:id="@+id/btnLogout"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="56dp"
         android:text="Cerrar sesión"
-        android:textColor="#FFFFFF"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
         android:textStyle="bold"
+        android:textSize="16sp"
+        android:backgroundTint="@color/mint_primary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:shapeAppearanceOverlay="@style/PillShape"
         android:layout_marginBottom="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,49 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#F5F5F5">
+    android:background="@color/bg_dark">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        android:paddingBottom="88dp">
+        android:paddingBottom="100dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/ivCover"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:scaleType="centerCrop"
-                android:background="#DDDDDD" />
+                android:layout_height="250dp">
+
+                <ImageView
+                    android:id="@+id/ivCover"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:background="@color/surface_dark" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:layout_gravity="bottom"
+                    android:background="@drawable/bg_gradient_dark" />
+            </FrameLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="20dp">
+                android:padding="24dp">
 
                 <TextView
                     android:id="@+id/tvCounterTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Cargando título..."
-                    android:textSize="26sp"
+                    android:textSize="28sp"
                     android:textStyle="bold"
-                    android:textColor="#333333" />
+                    android:textColor="@color/white" />
 
                 <TextView
                     android:id="@+id/tvCounterStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Estado: -"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
+                    android:textColor="@color/mint_primary"
                     android:layout_marginTop="4dp"
                     android:textStyle="bold" />
 
@@ -53,7 +65,8 @@
                     android:layout_height="wrap_content"
                     android:text="..."
                     android:textSize="16sp"
-                    android:layout_marginTop="12dp" />
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginTop="16dp" />
 
                 <TextView
                     android:id="@+id/tvCounterDates"
@@ -61,22 +74,24 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="Cierra el: -"
-                    android:textSize="14dp"
-                    android:textColor="#666666" />
+                    android:textSize="12sp"
+                    android:textColor="@color/text_secondary" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
+                    android:layout_marginTop="24dp"
                     android:layout_marginBottom="16dp"
-                    android:background="#F0F8FF"
-                    android:padding="8dp">
+                    android:background="@drawable/bg_edittext_dark"
+                    android:padding="12dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Código de invitación: "
+                        android:text="Código: "
+                        android:textColor="@color/text_secondary"
                         android:textStyle="bold"/>
 
                     <TextView
@@ -87,14 +102,16 @@
                         android:text="Cargando..."
                         android:textIsSelectable="true"
                         android:fontFamily="monospace"
-                        android:textColor="#0066CC"/>
+                        android:textColor="@color/white"
+                        android:textSize="16sp"/>
 
                     <ImageButton
                         android:id="@+id/btnCopyCode"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:src="@drawable/ic_copy"
-                        android:background="#ddbbfa"
+                        android:background="@android:color/transparent"
+                        app:tint="@color/mint_primary"
                         android:padding="8dp" />
                 </LinearLayout>
 
@@ -102,7 +119,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="24dp"
                     android:gravity="center" >
 
                     <LinearLayout
@@ -115,18 +132,18 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="GLOBAL"
-                            android:textSize="14sp"
+                            android:textSize="12sp"
                             android:textStyle="bold"
-                            android:textColor="#012f5c"/>
+                            android:textColor="@color/text_secondary"/>
 
                         <TextView
                             android:id="@+id/tvCounterGlobalCount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0"
-                            android:textSize="32sp"
+                            android:textSize="36sp"
                             android:textStyle="bold"
-                            android:textColor="#0066CC" />
+                            android:textColor="@color/white" />
 
                     </LinearLayout>
 
@@ -140,34 +157,35 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="PROPIO"
-                            android:textSize="14sp"
+                            android:textSize="12sp"
                             android:textStyle="bold"
-                            android:textColor="#2e0154"/>
+                            android:textColor="@color/text_secondary"/>
                         <TextView
                             android:id="@+id/tvCounterIndividualCount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0"
-                            android:textSize="32sp"
+                            android:textSize="36sp"
                             android:textStyle="bold"
-                            android:textColor="#8A36D2" />
+                            android:textColor="@color/mint_primary" />
                     </LinearLayout>
                 </LinearLayout>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="32dp"
+                    android:layout_marginTop="40dp"
                     android:text="RANKING DE PARTICIPANTES"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold"
-                    android:textColor="#333333"/>
+                    android:textColor="@color/white"
+                    android:letterSpacing="0.1"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvRanking"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="16dp"
                     android:nestedScrollingEnabled="false" />
 
                 <LinearLayout
@@ -175,25 +193,30 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginTop="16dp" >
+                    android:layout_marginTop="32dp" >
 
                     <Button
                         android:id="@+id/btnEdit"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="52dp"
                         android:layout_weight="1"
                         android:text="Editar"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
                         android:layout_marginEnd="8dp"
-                        android:backgroundTint="#0066CC"/>
+                        android:backgroundTint="@color/surface_dark"
+                        app:shapeAppearanceOverlay="@style/PillShape"/>
 
                     <Button
                         android:id="@+id/btnDelete"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="52dp"
                         android:layout_weight="1"
                         android:text="Borrar"
-                        android:layout_marginEnd="8dp"
-                        android:backgroundTint="#f00505" />
+                        android:textAllCaps="false"
+                        android:textColor="#FF5252"
+                        android:backgroundTint="@color/surface_dark"
+                        app:shapeAppearanceOverlay="@style/PillShape" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -202,14 +225,15 @@
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/fabIncrement"
         android:layout_width="wrap_content"
-        android:layout_height="45dp"
+        android:layout_height="56dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="32dp"
         android:text="+1"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/black"
+        android:textSize="18sp"
         android:textStyle="bold"
-        app:backgroundTint="#8A36D2"
-        app:shapeAppearanceOverlay="@style/CircleShape" />
+        app:backgroundTint="@color/mint_primary"
+        app:shapeAppearanceOverlay="@style/PillShape" />
 
 </RelativeLayout>
