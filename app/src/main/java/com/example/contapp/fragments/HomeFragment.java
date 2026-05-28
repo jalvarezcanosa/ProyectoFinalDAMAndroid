@@ -55,7 +55,6 @@ public class HomeFragment extends Fragment {
         // requireContext() sustituye a 'this'
         apiService = ApiClient.getClient(requireContext()).create(ApiService.class);
 
-        // view.findViewById para buscar en el trozo de pantalla
         recyclerView = view.findViewById(R.id.recyclerViewCounters);
         fabCreate = view.findViewById(R.id.fabCreate);
         btnJoin = view.findViewById(R.id.btnJoin);
@@ -75,7 +74,6 @@ public class HomeFragment extends Fragment {
     }
 
     private void setupSpinner() {
-        // Las opciones que verá el usuario
         String[] options = {"Todos", "Abiertos", "Cerrados"};
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, options);
         spinnerFilter.setAdapter(spinnerAdapter);
@@ -130,7 +128,6 @@ public class HomeFragment extends Fragment {
     }
 
     private void showJoinDialog() {
-        // Los diálogos y componentes visuales creados desde código necesitan requireContext()
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("Unirse a un Contador");
         builder.setMessage("Introduce el código de invitación:");

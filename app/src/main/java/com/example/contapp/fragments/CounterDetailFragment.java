@@ -99,7 +99,7 @@ public class CounterDetailFragment extends Fragment {
         participantAdapter = new ParticipantAdapter();
         rvRanking.setAdapter(participantAdapter);
 
-       fabIncrement.setOnClickListener(v -> incrementCounter());
+        fabIncrement.setOnClickListener(v -> incrementCounter());
 
         btnDelete.setOnClickListener(v -> showDeleteConfirmation());
 
