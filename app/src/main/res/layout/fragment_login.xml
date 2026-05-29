@@ -10,7 +10,7 @@
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Log in"
+        android:text="Iniciar Sesión"
         android:textSize="18sp"
         android:textColor="@color/white"
         android:textStyle="bold"
@@ -31,7 +31,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Your email"
+            android:text="Tu email"
             android:textColor="@color/white"
             android:textSize="14sp"
             android:layout_marginBottom="8dp"/>
@@ -51,7 +51,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Password"
+            android:text="Contraseña"
             android:textColor="@color/white"
             android:textSize="14sp"
             android:layout_marginBottom="8dp"/>
@@ -72,7 +72,7 @@
             android:id="@+id/btnAction"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:text="Log in"
+            android:text="Iniciar sesión"
             android:textAllCaps="false"
             android:textColor="@color/black"
             android:textSize="16sp"
@@ -84,7 +84,7 @@
             android:id="@+id/tvToggleMode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="You don't have an account? Sign Up"
+            android:text="¿No tienes cuenta? Regístrate"
             android:textColor="@color/text_secondary"
             android:textSize="14sp"
             android:layout_gravity="center"
