@@ -18,8 +18,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Mis Contadores"
-            android:textSize="24sp"
+            android:text="C0NTAPP"
+            android:fontFamily="@font/kinesthesia_semibold_italic"
+            android:textSize="40sp"
             android:textStyle="bold"
             android:textColor="@color/white"/>
 
