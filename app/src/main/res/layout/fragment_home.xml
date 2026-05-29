@@ -57,7 +57,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:backgroundTint="@color/text_secondary" />
+            android:backgroundTint="@color/mint_primary"
+            android:theme="@style/SpinnerItemStyle" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

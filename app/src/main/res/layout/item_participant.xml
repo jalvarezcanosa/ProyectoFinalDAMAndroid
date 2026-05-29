@@ -3,18 +3,18 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="12dp"
+    android:padding="16dp"
     android:gravity="center_vertical"
-    android:background="?android:attr/selectableItemBackground">
+    android:background="@android:color/transparent">
 
     <TextView
         android:id="@+id/tvPosition"
-        android:layout_width="30dp"
+        android:layout_width="32dp"
         android:layout_height="wrap_content"
         android:text="1"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:textStyle="bold"
-        android:textColor="#555555"/>
+        android:textColor="@color/text_secondary"/>
 
     <TextView
         android:id="@+id/tvUsername"
@@ -24,7 +24,8 @@
         android:text="Nombre de Usuario"
         android:textSize="16sp"
         android:layout_marginStart="8dp"
-        android:textColor="#333333" />
+        android:textStyle="bold"
+        android:textColor="@color/white" />
 
     <TextView
         android:id="@+id/tvCLicks"
@@ -33,6 +34,6 @@
         android:text="150"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:textColor="#0066CC" />
+        android:textColor="@color/mint_primary" />
 
 </LinearLayout>

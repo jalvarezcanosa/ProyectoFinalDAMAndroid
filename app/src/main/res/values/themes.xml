@@ -23,4 +23,11 @@
     <style name="Theme.ContApp.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
         <item name="android:color">#22A5F3E3</item>
     </style>
+
+    <style name="SpinnerItemStyle" parent="@android:style/Widget.TextView.SpinnerItem">
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:backgroundTint">@color/black</item>
+    </style>
 </resources>
