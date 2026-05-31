@@ -1,4 +1,4 @@
-# ContApp 📱
+# ContApp - Android📱
 
 <p align="center">
   <img src="app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp" alt="ContApp Logo" width="100"/>
@@ -151,7 +151,7 @@ git clone https://github.com/jalvarezcanosa/ProyectoFinalDAMAndroid.git
 
 El backend debe estar corriendo antes de lanzar la app:
 ```bash
-python manage.py runserver 0.0.0.0:8000
+python manage.py runserver
 ```
 
 **4. Configurar el emulador**
